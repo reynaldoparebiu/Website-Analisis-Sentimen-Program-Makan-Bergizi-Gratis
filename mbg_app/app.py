@@ -132,7 +132,7 @@ st.markdown("### Tiga Tahapan Pelaksanaan")
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    st.image(""mbg_app/images/Dapur.jpeg") 
+    st.image("mbg_app/images/Dapur.jpeg") 
     st.markdown("<div class='alur-title'>01. Persiapan Dapur (SPPG)</div>", unsafe_allow_html=True)
     st.caption("SPPG menerima bahan pangan dari pemasok, melakukan pemeriksaan kualitas, mengolah makanan sesuai standar gizi Badan Gizi Nasional, kemudian mengemasnya untuk didistribusikan.")
 
