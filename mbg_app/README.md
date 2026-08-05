@@ -14,16 +14,21 @@ Aplikasi Streamlit 2 halaman:
 
 ```
 mbg_app/
-├── app.py                       # Halaman utama (Beranda)
+├── app.py
 ├── pages/
-│   └── 1_Analisis_Sentimen.py   # Halaman kedua (auto muncul di sidebar)
+│   └── 1_Analisis_Sentimen.py
 ├── utils/
-│   ├── preprocessing.py         # Fungsi pembersihan teks
-│   └── theme.py                 # Token warna & CSS bersama
+│   ├── preprocessing.py
+│   └── theme.py
 ├── models/
 │   ├── model_naive_bayes_final.pkl
 │   └── tfidf_vectorizer_final.pkl
-├── .streamlit/config.toml
+├── images/
+│   ├── Dapur.jpeg
+│   ├── Makan_mbg.jpg
+│   └── pengantaran.jpeg
+├── .streamlit/
+│   └── config.toml
 └── requirements.txt
 ```
 
@@ -46,17 +51,3 @@ streamlit run app.py
 > File `.pkl` di `models/` berukuran kecil (±140 KB & ±115 KB) sehingga
 > aman disertakan langsung di repo GitHub.
 
-## Menyesuaikan dengan judul penelitian Anda
-
-Buka `pages/1_Analisis_Sentimen.py`, ubah variabel `JUDUL_PENELITIAN` di
-bagian atas berkas agar sesuai persis dengan judul skripsi/penelitian Anda.
-
-## Jika hasil prediksi kurang akurat
-
-Vectorizer Anda dilatih dengan `lowercase=False`, artinya teks sudah
-dibersihkan/di-lowercase terlebih dahulu sebelum training. Fungsi
-`utils/preprocessing.py::clean_text` meniru langkah itu (lowercase, buang
-URL/mention/angka/tanda baca). **Jika notebook riset Anda melakukan
-langkah tambahan** (stemming Sastrawi, normalisasi kata gaul/slang,
-stopword removal manual, dll.), salin ulang langkah yang sama persis ke
-`clean_text` agar prediksi di aplikasi konsisten dengan hasil training.
