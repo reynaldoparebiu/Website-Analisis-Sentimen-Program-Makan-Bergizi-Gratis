@@ -132,17 +132,17 @@ st.markdown("### Tiga Tahapan Pelaksanaan")
 col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    st.image("images/Dapur.jpeg") 
+    st.image(""mbg_app/images/Dapur.jpeg") 
     st.markdown("<div class='alur-title'>01. Persiapan Dapur (SPPG)</div>", unsafe_allow_html=True)
     st.caption("SPPG menerima bahan pangan dari pemasok, melakukan pemeriksaan kualitas, mengolah makanan sesuai standar gizi Badan Gizi Nasional, kemudian mengemasnya untuk didistribusikan.")
 
 with col2:
-    st.image("images/pengantaran.jpeg")
+    st.image("mbg_app/images/pengantaran.jpeg")
     st.markdown("<div class='alur-title'>02. Distribusi ke Sekolah</div>", unsafe_allow_html=True)
     st.caption("Makanan yang telah dikemas didistribusikan dari SPPG ke sekolah atau kelompok sasaran sesuai jadwal dengan tetap menjaga keamanan dan kualitas pangan.")
 
 with col3:
-    st.image("images/Makan_mbg.jpg")
+    st.image("mbg_app/images/Makan_mbg.jpg")
     st.markdown("<div class='alur-title'>03. Anak-anak Menikmati</div>", unsafe_allow_html=True)
     st.caption("Peserta didik menyantap makanan bergizi secara serentak bersama teman-teman di kelas dengan pengawasan para guru.")
 
