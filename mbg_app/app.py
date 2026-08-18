@@ -40,13 +40,20 @@ st.markdown(
 
 /* =========================================================
    PENGATURAN GAMBAR UMUM
-   Tidak menggunakan height tetap agar gambar tidak terpotong
+   Membatasi ukuran di layar besar agar tidak over-scale
    ========================================================= */
 
+/* Pusatkan gambar jika ukurannya lebih kecil dari lebar kolom */
+[data-testid="stImage"] {
+    display: flex;
+    justify-content: center;
+}
+
 [data-testid="stImage"] img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
-    object-fit: contain;
+    max-height: 450px; /* Batas tinggi maksimal untuk layar besar, bisa disesuaikan (misal: 400px - 500px) */
+    object-fit: contain; /* Memastikan gambar tetap proporsional dan tidak terpotong */
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
