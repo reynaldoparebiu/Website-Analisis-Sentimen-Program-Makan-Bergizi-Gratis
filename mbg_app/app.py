@@ -85,7 +85,7 @@ slide_count = st_autorefresh(
 
 current_index = slide_count % len(menu_images)
 
-# MENAMBAHKAN vertical_alignment="center" AGAR GAMBAR SEJAJAR DI TENGAH DENGAN TEKS
+
 hero_col, illus_col = st.columns([1.55, 1], gap="large", vertical_alignment="center")
 
 with hero_col:
@@ -113,42 +113,36 @@ with illus_col:
         use_container_width=True
     )
 
-    st.markdown(
-        f"""
-        <div style="
-            text-align: center;
-            color: #214332;
-            font-weight: 700;
-            font-size: 15px;
-            margin-top: 12px;
-        ">
-            {menu_titles[current_index]}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
     # Indikator slider
     indicators = " ".join(
         "●" if i == current_index else "○"
         for i in range(len(menu_images))
     )
 
+    # Bungkus teks dan indikator dalam div dengan max-width 380px agar sejajar dengan gambar
     st.markdown(
         f"""
-        <div style="
-            text-align: center;
-            color: #214332;
-            font-size: 17px;
-            letter-spacing: 3px;
-            margin-top: 4px;
-        ">
-            {indicators}
+        <div style="max-width: 380px; margin: 0 auto; text-align: center;">
+            <div style="
+                color: #214332;
+                font-weight: 700;
+                font-size: 15px;
+                margin-top: 12px;
+            ">
+                {menu_titles[current_index]}
+            </div>
+            <div style="
+                color: #214332;
+                font-size: 17px;
+                letter-spacing: 3px;
+                margin-top: 4px;
+            ">
+                {indicators}
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
-
 
 
 # Statistik ringkas
