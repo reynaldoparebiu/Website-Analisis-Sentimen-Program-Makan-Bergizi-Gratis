@@ -51,30 +51,22 @@ with st.sidebar:
     st.markdown("---")
     st.caption("Dibangun dengan Streamlit")
 
-# Hero — ilustrasi baki makan (nampan) sebagai motif visual utama
-tray_svg = f"""
-<svg viewBox="0 0 260 200" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-  <ellipse cx="130" cy="178" rx="105" ry="12" fill="#0E241C" opacity="0.18"/>
-  <rect x="18" y="30" width="224" height="140" rx="22" fill="#0F2A22"/>
-  <rect x="30" y="42" width="200" height="116" rx="16" fill="#F3E9D2"/>
-  <circle cx="88" cy="98" r="34" fill="#FFFFFF"/>
-  <circle cx="88" cy="98" r="34" fill="none" stroke="#E4D7B4" stroke-width="2"/>
-  <g opacity="0.9">
-    <ellipse cx="80" cy="90" rx="4" ry="3" fill="#F3E9D2"/>
-    <ellipse cx="92" cy="88" rx="4" ry="3" fill="#F3E9D2"/>
-    <ellipse cx="98" cy="100" rx="4" ry="3" fill="#F3E9D2"/>
-    <ellipse cx="82" cy="104" rx="4" ry="3" fill="#F3E9D2"/>
-    <ellipse cx="94" cy="108" rx="4" ry="3" fill="#F3E9D2"/>
-  </g>
-  <circle cx="164" cy="80" r="22" fill="{MANGO}"/>
-  <path d="M148 80a16 16 0 1 1 32 0" fill="none" stroke="#B97A1F" stroke-width="2" opacity="0.4"/>
-  <circle cx="192" cy="118" r="19" fill="{SAGE}"/>
-  <rect x="182" y="108" width="20" height="20" rx="4" fill="{SAGE}"/>
-  <circle cx="150" cy="132" r="16" fill="{CLAY}"/>
-  <rect x="46" y="60" width="10" height="70" rx="5" fill="#D8CBA6"/>
-  <rect x="60" y="60" width="10" height="70" rx="5" fill="#D8CBA6"/>
-</svg>
-"""
+# Hero — Slider Foto Menu MBG
+menu_images = [
+    "images/menu1.jpeg",
+    "images/menu2.jpeg",
+    "images/menu3.jpeg",
+]
+
+menu_titles = [
+    "Menu Makan Bergizi Gratis",
+    "Menu Bergizi Seimbang",
+    "Menu Sehat untuk Peserta Didik",
+]
+
+if "menu_index" not in st.session_state:
+    st.session_state.menu_index = 0
+
 
 hero_col, illus_col = st.columns([1.55, 1], gap="large")
 with hero_col:
@@ -96,10 +88,82 @@ with hero_col:
         unsafe_allow_html=True,
     )
 with illus_col:
-    st.markdown(
-        f"""<div style="padding-top:0.4rem;">{tray_svg}</div>""",
-        unsafe_allow_html=True,
+    st.markdown("""
+        <style>
+        .hero-menu-image img {
+            width: 100%;
+            height: 310px;
+            object-fit: cover;
+            border-radius: 24px;
+            border: 10px solid #0F2A22;
+            box-shadow: 0 10px 25px rgba(15, 42, 34, 0.15);
+        }
+
+        .menu-title {
+            text-align: center;
+            font-weight: 700;
+            color: #214332;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    current_index = st.session_state.menu_index
+
+    st.image(
+        menu_images[current_index],
+        use_container_width=True
     )
+
+    st.markdown(
+        f"""
+        <div class="menu-title">
+            {menu_titles[current_index]}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Tombol slider
+    left, center, right = st.columns([1, 3, 1])
+
+    with left:
+        if st.button("←", key="prev_menu", use_container_width=True):
+            st.session_state.menu_index = (
+                st.session_state.menu_index - 1
+            ) % len(menu_images)
+            st.rerun()
+
+    with center:
+        indicators = ""
+
+        for i in range(len(menu_images)):
+            if i == st.session_state.menu_index:
+                indicators += "● "
+            else:
+                indicators += "○ "
+
+        st.markdown(
+            f"""
+            <div style="
+                text-align:center;
+                font-size:18px;
+                color:#214332;
+                padding-top:5px;
+            ">
+                {indicators}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with right:
+        if st.button("→", key="next_menu", use_container_width=True):
+            st.session_state.menu_index = (
+                st.session_state.menu_index + 1
+            ) % len(menu_images)
+            st.rerun()
 
 
 # Statistik ringkas
