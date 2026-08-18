@@ -1,6 +1,3 @@
-import textwrap
-import base64
-import mimetypes
 from pathlib import Path
 
 import streamlit as st
@@ -22,7 +19,7 @@ st.set_page_config(
 
 
 # ============================================================
-# PATH PROJECT
+# PATH APLIKASI
 # ============================================================
 
 APP_DIR = Path(__file__).resolve().parent
@@ -30,130 +27,108 @@ IMAGE_DIR = APP_DIR / "images"
 
 
 # ============================================================
-# CSS TAMBAHAN
+# CSS UTAMA
 # ============================================================
 
-st.markdown(
-    """
-    <style>
-
-    /* =====================================================
-       GAMBAR ALUR PROGRAM
-       ===================================================== */
-
-    .alur-image img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-
-    /* =====================================================
-       JUDUL TAHAPAN
-       ===================================================== */
-
-    .alur-title {
-        color: #214332;
-        font-weight: 700;
-        font-size: 18px;
-        margin-top: 15px;
-        margin-bottom: 5px;
-    }
-
-
-    /* =====================================================
-       SLIDER MENU HERO
-       ===================================================== */
-
-    .menu-slider-wrapper {
-        width: 100%;
-        margin-top: 0.4rem;
-    }
-
-    .menu-slider-image-box {
-        width: 100%;
-        height: 360px;
-        background: #F7F2E7;
-        border-radius: 22px;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
-    }
-
-    .menu-slider-image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .menu-slider-title {
-        text-align: center;
-        color: #214332;
-        font-weight: 700;
-        font-size: 15px;
-        margin-top: 12px;
-    }
-
-    .menu-slider-indicator {
-        text-align: center;
-        color: #214332;
-        font-size: 17px;
-        letter-spacing: 4px;
-        margin-top: 4px;
-    }
-
-
-    /* =====================================================
-       RESPONSIVE
-       ===================================================== */
-
-    @media (max-width: 768px) {
-
-        .menu-slider-image-box {
-            height: 300px;
-        }
-
-    }
-
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# ============================================================
-# CSS UTAMA TEMA
-# ============================================================
-
+# CSS dari theme.py
 st.markdown(BASE_CSS, unsafe_allow_html=True)
 
-
-# ============================================================
-# FUNGSI MEMBACA GAMBAR UNTUK SLIDER
-# ============================================================
-
-def image_to_base64(image_path):
+# CSS tambahan khusus halaman Beranda
+st.markdown(
     """
-    Mengubah gambar lokal menjadi Base64 agar dapat
-    ditampilkan melalui HTML tanpa terpengaruh CSS st.image().
-    """
+<style>
 
-    with open(image_path, "rb") as image_file:
-        encoded_image = base64.b64encode(
-            image_file.read()
-        ).decode()
+/* =========================================================
+   PENGATURAN GAMBAR UMUM
+   Tidak menggunakan height tetap agar gambar tidak terpotong
+   ========================================================= */
 
-    mime_type, _ = mimetypes.guess_type(str(image_path))
+[data-testid="stImage"] img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
 
-    if mime_type is None:
-        mime_type = "image/jpeg"
 
-    return encoded_image, mime_type
+/* =========================================================
+   HERO SLIDER
+   ========================================================= */
+
+.menu-slider-container {
+    width: 100%;
+    margin-top: 0;
+}
+
+.menu-slider-container img {
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: contain;
+    border-radius: 18px;
+}
+
+
+/* =========================================================
+   JUDUL FOTO MENU
+   ========================================================= */
+
+.menu-title {
+    text-align: center;
+    color: #214332;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   INDIKATOR SLIDER
+   ========================================================= */
+
+.menu-indicator {
+    text-align: center;
+    color: #214332;
+    font-size: 16px;
+    letter-spacing: 4px;
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   JUDUL TAHAPAN
+   ========================================================= */
+
+.alur-title {
+    color: #214332;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .menu-title {
+        font-size: 14px;
+    }
+
+    .menu-indicator {
+        font-size: 15px;
+    }
+
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ============================================================
@@ -199,7 +174,6 @@ menu_images = [
     IMAGE_DIR / "menu3.jpeg",
 ]
 
-
 menu_titles = [
     "Menu Makan Bergizi Gratis 1",
     "Menu Makan Bergizi Gratis 2",
@@ -208,7 +182,23 @@ menu_titles = [
 
 
 # ============================================================
+# VALIDASI FILE GAMBAR
+# ============================================================
+
+for image_path in menu_images:
+    if not image_path.exists():
+        st.error(
+            f"❌ File gambar tidak ditemukan: {image_path.name}"
+        )
+        st.info(
+            "Pastikan file gambar berada di folder: mbg_app/images/"
+        )
+        st.stop()
+
+
+# ============================================================
 # AUTO SLIDE
+# BERGANTI SETIAP 4 DETIK
 # ============================================================
 
 slide_count = st_autorefresh(
@@ -221,22 +211,7 @@ current_index = slide_count % len(menu_images)
 
 
 # ============================================================
-# CEK FILE GAMBAR
-# ============================================================
-
-for image_path in menu_images:
-
-    if not image_path.exists():
-
-        st.error(
-            f"Gambar tidak ditemukan: {image_path.name}"
-        )
-
-        st.stop()
-
-
-# ============================================================
-# HERO
+# HERO SECTION
 # ============================================================
 
 hero_col, illus_col = st.columns(
@@ -247,90 +222,104 @@ hero_col, illus_col = st.columns(
 
 # ============================================================
 # HERO KIRI
+# DIPERTAHANKAN SEPERTI DESAIN SEBELUMNYA
 # ============================================================
 
 with hero_col:
+
+    hero_html = """
+<div class="mbg-hero">
+<span class="mbg-eyebrow">Program Strategis Nasional</span>
+<h1>Apa itu Makan Bergizi Gratis (MBG)?</h1>
+<p>
+Program Makan Bergizi Gratis (MBG) adalah salah satu program strategis nasional yang
+diselenggarakan oleh pemerintah melalui Badan Gizi Nasional (BGN) untuk menyediakan
+makanan bergizi kepada peserta didik, ibu hamil, ibu menyusui, dan balita. Program ini
+bertujuan meningkatkan kualitas gizi masyarakat, mendukung tumbuh kembang anak,
+mempercepat penurunan prevalensi stunting, serta mewujudkan sumber daya manusia
+Indonesia yang sehat, cerdas, dan produktif.
+</p>
+</div>
+"""
+
     st.markdown(
-        textwrap.dedent("""
-        <div class="mbg-hero">
-            <span class="mbg-eyebrow">Program Strategis Nasional</span>
-
-            <h1>Apa itu Makan Bergizi Gratis (MBG)?</h1>
-
-            <p>
-                Program Makan Bergizi Gratis (MBG) adalah salah satu program strategis nasional yang
-                diselenggarakan oleh pemerintah melalui Badan Gizi Nasional (BGN) untuk menyediakan
-                makanan bergizi kepada peserta didik, ibu hamil, ibu menyusui, dan balita. Program ini
-                bertujuan meningkatkan kualitas gizi masyarakat, mendukung tumbuh kembang anak,
-                mempercepat penurunan prevalensi stunting, serta mewujudkan sumber daya manusia
-                Indonesia yang sehat, cerdas, dan produktif.
-            </p>
-        </div>
-        """),
-        unsafe_allow_html=True
+        hero_html,
+        unsafe_allow_html=True,
     )
 
+
 # ============================================================
-# HERO KANAN - SLIDER FOTO MENU
+# HERO KANAN
+# SLIDER FOTO MENU
 # ============================================================
 
 with illus_col:
 
-    current_image_path = menu_images[current_index]
+    # Menampilkan gambar secara utuh
+    st.image(
+        str(menu_images[current_index]),
+        use_container_width=True,
+    )
 
-    image_data, image_mime = image_to_base64(current_image_path)
+    # Judul gambar
+    title_html = (
+        f'<div class="menu-title">'
+        f'{menu_titles[current_index]}'
+        f'</div>'
+    )
 
+    st.markdown(
+        title_html,
+        unsafe_allow_html=True,
+    )
+
+    # Indikator ● ○ ○
     indicators = " ".join(
         "●" if i == current_index else "○"
         for i in range(len(menu_images))
     )
 
-    slider_html = f"""
-<div class="menu-slider-wrapper">
-
-    <div class="menu-slider-image-box">
-        <img
-            src="data:{image_mime};base64,{image_data}"
-            alt="{menu_titles[current_index]}"
-        >
-    </div>
-
-    <div class="menu-slider-title">
-        {menu_titles[current_index]}
-    </div>
-
-    <div class="menu-slider-indicator">
-        {indicators}
-    </div>
-
-</div>
-"""
+    indicator_html = (
+        f'<div class="menu-indicator">'
+        f'{indicators}'
+        f'</div>'
+    )
 
     st.markdown(
-        textwrap.dedent(slider_html),
-        unsafe_allow_html=True
+        indicator_html,
+        unsafe_allow_html=True,
     )
+
 
 # ============================================================
 # STATISTIK RINGKAS
 # ============================================================
 
 st.markdown(
-    '<p class="section-eyebrow">Sekilas Angka</p>',
+    '<p class="section-eyebrow">SEKILAS ANGKA</p>',
     unsafe_allow_html=True,
 )
 
-
 s1, s2, s3, s4 = st.columns(4)
 
-
 stats = [
-    ("82,9 juta", "Target penerima manfaat nasional"),
-    ("32.000", "Target Satuan Pelayanan Pemenuhan Gizi (SPPG)"),
-    ("2,4 Juta", "Ibu hamil, ibu menyusui, dan balita"),
-    ("18% → 14%", "Target prevalensi stunting tahun 2029"),
+    (
+        "82,9 juta",
+        "Target penerima manfaat nasional",
+    ),
+    (
+        "32.000",
+        "Target Satuan Pelayanan Pemenuhan Gizi (SPPG)",
+    ),
+    (
+        "2,4 Juta",
+        "Ibu hamil, ibu menyusui, dan balita",
+    ),
+    (
+        "18% → 14%",
+        "Target prevalensi stunting tahun 2029",
+    ),
 ]
-
 
 for col, (num, label) in zip(
     [s1, s2, s3, s4],
@@ -339,26 +328,25 @@ for col, (num, label) in zip(
 
     with col:
 
+        stat_html = (
+            '<div class="stat-box">'
+            f'<div class="stat-num">{num}</div>'
+            f'<div class="stat-label">{label}</div>'
+            '</div>'
+        )
+
         st.markdown(
-            f"""
-            <div class="stat-box">
-
-                <div class="stat-num">
-                    {num}
-                </div>
-
-                <div class="stat-label">
-                    {label}
-                </div>
-
-            </div>
-            """,
+            stat_html,
             unsafe_allow_html=True,
         )
 
 
 st.caption("*Data berdasarkan target resmi pemerintah.")
 
+
+# ============================================================
+# GARIS PEMBATAS
+# ============================================================
 
 st.markdown(
     '<hr class="divider-thin"/>',
@@ -384,29 +372,24 @@ col1, col2, col3 = st.columns(
 )
 
 
-# ------------------------------------------------------------
+# ============================================================
 # TAHAP 1
-# ------------------------------------------------------------
+# ============================================================
 
 with col1:
 
-    st.markdown(
-        '<div class="alur-image">',
-        unsafe_allow_html=True,
-    )
+    dapur_image = IMAGE_DIR / "Dapur.jpeg"
 
-    st.image(
-        str(IMAGE_DIR / "Dapur.jpeg"),
-        use_container_width=True,
-    )
+    if dapur_image.exists():
+        st.image(
+            str(dapur_image),
+            use_container_width=True,
+        )
 
     st.markdown(
+        "<div class='alur-title'>"
+        "01. Persiapan Dapur (SPPG)"
         "</div>",
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        "<div class='alur-title'>01. Persiapan Dapur (SPPG)</div>",
         unsafe_allow_html=True,
     )
 
@@ -417,19 +400,24 @@ with col1:
     )
 
 
-# ------------------------------------------------------------
+# ============================================================
 # TAHAP 2
-# ------------------------------------------------------------
+# ============================================================
 
 with col2:
 
-    st.image(
-        str(IMAGE_DIR / "pengantaran.jpeg"),
-        use_container_width=True,
-    )
+    pengantaran_image = IMAGE_DIR / "pengantaran.jpeg"
+
+    if pengantaran_image.exists():
+        st.image(
+            str(pengantaran_image),
+            use_container_width=True,
+        )
 
     st.markdown(
-        "<div class='alur-title'>02. Distribusi ke Sekolah</div>",
+        "<div class='alur-title'>"
+        "02. Distribusi ke Sekolah"
+        "</div>",
         unsafe_allow_html=True,
     )
 
@@ -440,19 +428,24 @@ with col2:
     )
 
 
-# ------------------------------------------------------------
+# ============================================================
 # TAHAP 3
-# ------------------------------------------------------------
+# ============================================================
 
 with col3:
 
-    st.image(
-        str(IMAGE_DIR / "Makan_mbg.jpg"),
-        use_container_width=True,
-    )
+    makan_image = IMAGE_DIR / "Makan_mbg.jpg"
+
+    if makan_image.exists():
+        st.image(
+            str(makan_image),
+            use_container_width=True,
+        )
 
     st.markdown(
-        "<div class='alur-title'>03. Anak-anak Menikmati</div>",
+        "<div class='alur-title'>"
+        "03. Anak-anak Menikmati"
+        "</div>",
         unsafe_allow_html=True,
     )
 
@@ -460,6 +453,16 @@ with col3:
         "Peserta didik menyantap makanan bergizi secara serentak bersama "
         "teman-teman di kelas dengan pengawasan para guru."
     )
+
+
+# ============================================================
+# PEMBATAS
+# ============================================================
+
+st.markdown(
+    '<hr class="divider-thin"/>',
+    unsafe_allow_html=True,
+)
 
 
 # ============================================================
@@ -477,35 +480,15 @@ st.markdown(
 
 
 # ============================================================
-# ICON YAYASAN
+# ICON MITRA PENYELENGGARA
 # ============================================================
 
 icon_yayasan = """
 <svg width="42" height="42" viewBox="0 0 42 42"
 fill="none" xmlns="http://www.w3.org/2000/svg">
-
-    <rect
-        x="4"
-        y="18"
-        width="34"
-        height="20"
-        rx="3"
-        fill="#173C31"
-    />
-
-    <path
-        d="M21 6 L38 18 H4 Z"
-        fill="#E8A33D"
-    />
-
-    <rect
-        x="17"
-        y="24"
-        width="8"
-        height="14"
-        fill="#FBF6EA"
-    />
-
+<rect x="4" y="18" width="34" height="20" rx="3" fill="#173C31"/>
+<path d="M21 6 L38 18 H4 Z" fill="#E8A33D"/>
+<rect x="17" y="24" width="8" height="14" fill="#FBF6EA"/>
 </svg>
 """
 
@@ -517,30 +500,18 @@ fill="none" xmlns="http://www.w3.org/2000/svg">
 icon_dapur = """
 <svg width="42" height="42" viewBox="0 0 42 42"
 fill="none" xmlns="http://www.w3.org/2000/svg">
-
-    <circle
-        cx="21"
-        cy="24"
-        r="14"
-        fill="#FBF6EA"
-        stroke="#173C31"
-        stroke-width="2.5"
-    />
-
-    <path
-        d="M13 24a8 8 0 0 1 16 0"
-        fill="#E8A33D"
-    />
-
-    <path
-        d="M15 8c0 3-3 3-3 6
-           M22 6c0 3-3 3-3 6
-           M29 8c0 3-3 3-3 6"
-        stroke="#C1502E"
-        stroke-width="2.4"
-        stroke-linecap="round"
-    />
-
+<circle cx="21" cy="24" r="14"
+fill="#FBF6EA"
+stroke="#173C31"
+stroke-width="2.5"/>
+<path d="M13 24a8 8 0 0 1 16 0"
+fill="#E8A33D"/>
+<path d="M15 8c0 3-3 3-3 6
+M22 6c0 3-3 3-3 6
+M29 8c0 3-3 3-3 6"
+stroke="#C1502E"
+stroke-width="2.4"
+stroke-linecap="round"/>
 </svg>
 """
 
@@ -552,45 +523,11 @@ fill="none" xmlns="http://www.w3.org/2000/svg">
 icon_sekolah = """
 <svg width="42" height="42" viewBox="0 0 42 42"
 fill="none" xmlns="http://www.w3.org/2000/svg">
-
-    <rect
-        x="6"
-        y="16"
-        width="30"
-        height="20"
-        rx="2"
-        fill="#173C31"
-    />
-
-    <rect
-        x="14"
-        y="22"
-        width="6"
-        height="6"
-        fill="#FBF6EA"
-    />
-
-    <rect
-        x="22"
-        y="22"
-        width="6"
-        height="6"
-        fill="#FBF6EA"
-    />
-
-    <path
-        d="M21 6 L36 16 H6 Z"
-        fill="#4C7A5E"
-    />
-
-    <rect
-        x="18"
-        y="28"
-        width="6"
-        height="8"
-        fill="#E8A33D"
-    />
-
+<rect x="6" y="16" width="30" height="20" rx="2" fill="#173C31"/>
+<rect x="14" y="22" width="6" height="6" fill="#FBF6EA"/>
+<rect x="22" y="22" width="6" height="6" fill="#FBF6EA"/>
+<path d="M21 6 L36 16 H6 Z" fill="#4C7A5E"/>
+<rect x="18" y="28" width="6" height="8" fill="#E8A33D"/>
 </svg>
 """
 
@@ -633,6 +570,10 @@ pillars = [
 ]
 
 
+# ============================================================
+# TAMPILAN CARD EKOSISTEM
+# ============================================================
+
 c1, c2, c3 = st.columns(
     3,
     gap="medium",
@@ -646,29 +587,24 @@ for col, (step, icon, title, desc, cls) in zip(
 
     with col:
 
+        pillar_html = (
+            f'<div class="tray-card {cls}">'
+            f'<div class="tray-step">{step}</div>'
+            f'{icon}'
+            f'<h3>{title}</h3>'
+            f'<p>{desc}</p>'
+            f'</div>'
+        )
+
         st.markdown(
-            f"""
-            <div class="tray-card {cls}">
-
-                <div class="tray-step">
-                    {step}
-                </div>
-
-                {icon}
-
-                <h3>
-                    {title}
-                </h3>
-
-                <p>
-                    {desc}
-                </p>
-
-            </div>
-            """,
+            pillar_html,
             unsafe_allow_html=True,
         )
 
+
+# ============================================================
+# PEMBATAS
+# ============================================================
 
 st.markdown(
     '<hr class="divider-thin"/>',
@@ -686,6 +622,10 @@ u_col, s_col = st.columns(
 )
 
 
+# ============================================================
+# URGENSI
+# ============================================================
+
 with u_col:
 
     st.markdown(
@@ -697,13 +637,17 @@ with u_col:
 
     st.markdown(
         """
-        - Menurunkan risiko stunting, kekurangan gizi, dan meningkatkan kualitas asupan gizi peserta didik.
-        - Meningkatkan kehadiran, konsentrasi belajar, serta mendukung prestasi akademik peserta didik.
-        - Mendukung tumbuh kembang peserta didik serta mengurangi risiko putus sekolah, terutama di daerah rentan.
-        - Memberdayakan petani, nelayan, peternak, koperasi, dan UMKM pangan lokal sebagai bagian dari rantai pasok program.
-        """
+- Menurunkan risiko stunting, kekurangan gizi, dan meningkatkan kualitas asupan gizi peserta didik.
+- Meningkatkan kehadiran, konsentrasi belajar, serta mendukung prestasi akademik peserta didik.
+- Mendukung tumbuh kembang peserta didik serta mengurangi risiko putus sekolah, terutama di daerah rentan.
+- Memberdayakan petani, nelayan, peternak, koperasi, dan UMKM pangan lokal sebagai bagian dari rantai pasok program.
+"""
     )
 
+
+# ============================================================
+# SASARAN
+# ============================================================
 
 with s_col:
 
@@ -716,12 +660,16 @@ with s_col:
 
     st.markdown(
         """
-        - Peserta didik jenjang **PAUD hingga SMA/SMK** di satuan pendidikan yang tercakup program.
-        - Ibu hamil dan ibu menyusui sebagai kelompok rawan gizi prioritas.
-        - Balita sebagai kelompok prioritas dalam pemenuhan gizi.
-        """
+- Peserta didik jenjang **PAUD hingga SMA/SMK** di satuan pendidikan yang tercakup program.
+- Ibu hamil dan ibu menyusui sebagai kelompok rawan gizi prioritas.
+- Balita sebagai kelompok prioritas dalam pemenuhan gizi.
+"""
     )
 
+
+# ============================================================
+# PEMBATAS
+# ============================================================
 
 st.markdown(
     '<hr class="divider-thin"/>',
@@ -747,16 +695,18 @@ with cta_l:
     )
 
     st.markdown(
-        "### Bagaimana Persepsi Masyarakat terhadap Program Makan Bergizi Gratis?"
+        "### Bagaimana Persepsi Masyarakat terhadap "
+        "Program Makan Bergizi Gratis?"
     )
 
     st.markdown(
-        "Halaman **Analisis Sentimen** menyajikan hasil klasifikasi opini masyarakat "
-        "terhadap **Program Makan Bergizi Gratis (MBG)** berdasarkan data yang diperoleh "
-        "dari **media sosial X.** Proses analisis dilakukan menggunakan algoritma "
-        "**Multinomial Naive Bayes** dengan pembobotan fitur TF-IDF, sehingga "
-        "menghasilkan klasifikasi sentimen ke dalam tiga kategori, yaitu "
-        "**positif**, **netral**, dan **negatif**."
+        "Halaman **Analisis Sentimen** menyajikan hasil klasifikasi opini "
+        "masyarakat terhadap **Program Makan Bergizi Gratis (MBG)** "
+        "berdasarkan data yang diperoleh dari **media sosial X.** "
+        "Proses analisis dilakukan menggunakan algoritma "
+        "**Multinomial Naive Bayes** dengan pembobotan fitur TF-IDF, "
+        "sehingga menghasilkan klasifikasi sentimen ke dalam tiga "
+        "kategori, yaitu **positif**, **netral**, dan **negatif**."
     )
 
 
@@ -777,6 +727,10 @@ with cta_r:
             "pages/1_Analisis_Sentimen.py"
         )
 
+
+# ============================================================
+# PEMBATAS
+# ============================================================
 
 st.markdown(
     '<hr class="divider-thin"/>',
