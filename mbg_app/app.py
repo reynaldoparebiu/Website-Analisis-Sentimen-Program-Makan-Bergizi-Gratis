@@ -11,7 +11,7 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* 1. Menghapus efek "bungkus" (background/kotak tepi) pada container gambar */
+    /* 1. Menghapus efek "bungkus" (background/kotak tepi putih) pada container gambar */
     [data-testid="stImage"] {
         background: transparent !important;
         border: none !important;
@@ -19,13 +19,15 @@ st.markdown("""
         padding: 0 !important;
     }
 
-    /* 2. Memberikan shadow dan lengkungan langsung HANYA pada gambar */
+    /* 2. Styling khusus untuk gambar: shadow langsung di gambar & ukuran disesuaikan */
     [data-testid="stImage"] img {
         border-radius: 12px !important;
-        box-shadow: 0 12px 24px rgba(0,0,0,0.18) !important; /* Shadow elegan pada gambar */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important; /* Shadow lembut pada gambar */
         width: 100% !important;
-        height: auto !important; /* Menjaga proporsi asli agar tidak terpotong (responsive) */
-        display: block;
+        max-width: 380px !important; /* Membatasi ukuran maksimal di desktop agar tidak raksasa */
+        height: auto !important; /* Menjaga agar tidak kepotong */
+        display: block !important;
+        margin: 0 auto !important; /* Posisi ke tengah */
     }
     
     /* Styling untuk judul tahapan */
@@ -115,7 +117,7 @@ with illus_col:
             color: #214332;
             font-weight: 700;
             font-size: 15px;
-            margin-top: 15px;
+            margin-top: 12px;
         ">
             {menu_titles[current_index]}
         </div>
