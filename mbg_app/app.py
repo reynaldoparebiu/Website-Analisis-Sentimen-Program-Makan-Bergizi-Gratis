@@ -53,9 +53,10 @@ with st.sidebar:
 
 # Hero — Slider Foto Menu MBG
 menu_images = [
-    "images/menu1.jpeg",
-    "images/menu2.jpeg",
-    "images/menu3.jpeg",
+    "mbg_app/images/menu1.jpeg",
+    "mbg_app/images/menu2.jpeg",
+    "mbg_app/images/menu3.jpeg",
+
 ]
 
 menu_titles = [
