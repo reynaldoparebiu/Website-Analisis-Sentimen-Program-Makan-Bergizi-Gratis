@@ -17,6 +17,8 @@ st.markdown("""
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
+        display: flex !important;
+        justify-content: center !important; /* Memastikan posisi horizontal ke tengah */
     }
 
     /* 2. Styling khusus untuk gambar: shadow langsung di gambar & ukuran disesuaikan */
@@ -83,7 +85,8 @@ slide_count = st_autorefresh(
 
 current_index = slide_count % len(menu_images)
 
-hero_col, illus_col = st.columns([1.55, 1], gap="large")
+# MENAMBAHKAN vertical_alignment="center" AGAR GAMBAR SEJAJAR DI TENGAH DENGAN TEKS
+hero_col, illus_col = st.columns([1.55, 1], gap="large", vertical_alignment="center")
 
 with hero_col:
     st.markdown(
