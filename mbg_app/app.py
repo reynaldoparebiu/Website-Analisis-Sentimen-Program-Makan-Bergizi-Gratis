@@ -1,3 +1,4 @@
+import textwrap
 import base64
 import mimetypes
 from pathlib import Path
@@ -246,22 +247,15 @@ hero_col, illus_col = st.columns(
 
 # ============================================================
 # HERO KIRI
-# JANGAN DIUBAH - MEMPERTAHANKAN TAMPILAN YANG ANDA INGINKAN
 # ============================================================
 
 with hero_col:
-
     st.markdown(
-        """
+        textwrap.dedent("""
         <div class="mbg-hero">
+            <span class="mbg-eyebrow">Program Strategis Nasional</span>
 
-            <span class="mbg-eyebrow">
-                Program Strategis Nasional
-            </span>
-
-            <h1>
-                Apa itu Makan Bergizi Gratis (MBG)?
-            </h1>
+            <h1>Apa itu Makan Bergizi Gratis (MBG)?</h1>
 
             <p>
                 Program Makan Bergizi Gratis (MBG) adalah salah satu program strategis nasional yang
@@ -271,12 +265,10 @@ with hero_col:
                 mempercepat penurunan prevalensi stunting, serta mewujudkan sumber daya manusia
                 Indonesia yang sehat, cerdas, dan produktif.
             </p>
-
         </div>
-        """,
-        unsafe_allow_html=True,
+        """),
+        unsafe_allow_html=True
     )
-
 
 # ============================================================
 # HERO KANAN - SLIDER FOTO MENU
@@ -286,41 +278,38 @@ with illus_col:
 
     current_image_path = menu_images[current_index]
 
-    image_data, image_mime = image_to_base64(
-        current_image_path
-    )
+    image_data, image_mime = image_to_base64(current_image_path)
 
     indicators = " ".join(
         "●" if i == current_index else "○"
         for i in range(len(menu_images))
     )
 
+    slider_html = f"""
+<div class="menu-slider-wrapper">
+
+    <div class="menu-slider-image-box">
+        <img
+            src="data:{image_mime};base64,{image_data}"
+            alt="{menu_titles[current_index]}"
+        >
+    </div>
+
+    <div class="menu-slider-title">
+        {menu_titles[current_index]}
+    </div>
+
+    <div class="menu-slider-indicator">
+        {indicators}
+    </div>
+
+</div>
+"""
+
     st.markdown(
-        f"""
-        <div class="menu-slider-wrapper">
-
-            <div class="menu-slider-image-box">
-
-                <img
-                    src="data:{image_mime};base64,{image_data}"
-                    alt="{menu_titles[current_index]}"
-                >
-
-            </div>
-
-            <div class="menu-slider-title">
-                {menu_titles[current_index]}
-            </div>
-
-            <div class="menu-slider-indicator">
-                {indicators}
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True,
+        textwrap.dedent(slider_html),
+        unsafe_allow_html=True
     )
-
 
 # ============================================================
 # STATISTIK RINGKAS
