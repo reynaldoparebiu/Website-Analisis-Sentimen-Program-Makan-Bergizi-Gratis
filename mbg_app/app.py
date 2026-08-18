@@ -73,6 +73,8 @@ slide_count = st_autorefresh(
 
 current_index = slide_count % len(menu_images)
 
+hero_col, illus_col = st.columns([1.55, 1], gap="large")
+
 with illus_col:
 
     # Styling slider
