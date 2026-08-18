@@ -32,6 +32,20 @@ st.markdown("""
         margin: 0 auto !important; /* Posisi ke tengah */
     }
     
+    /* 3. Wrapper untuk Judul & Indikator Slider */
+    .caption-wrapper {
+        max-width: 380px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    /* 4. MENGGESER TEKS KE KIRI HANYA UNTUK TAMPILAN WEB (Desktop) */
+    @media (min-width: 992px) {
+        .caption-wrapper {
+            transform: translateX(-20px); /* Ubah angka -20px ini jika geserannya kurang/lebih */
+        }
+    }
+    
     /* Styling untuk judul tahapan */
     .alur-title {
         color: #214332; /* Warna hijau gelap senada dengan tema */
@@ -119,10 +133,10 @@ with illus_col:
         for i in range(len(menu_images))
     )
 
-    # Bungkus teks dan indikator dalam div dengan max-width 380px agar sejajar dengan gambar
+    # Menggunakan class "caption-wrapper" yang sudah diatur di CSS atas
     st.markdown(
         f"""
-        <div style="max-width: 380px; margin: 0 auto; text-align: center;">
+        <div class="caption-wrapper">
             <div style="
                 color: #214332;
                 font-weight: 700;
