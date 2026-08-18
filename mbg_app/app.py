@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 from utils.theme import BASE_CSS, PINE, MANGO, SAGE, CLAY
 
 st.set_page_config(
@@ -51,121 +52,110 @@ with st.sidebar:
     st.markdown("---")
     st.caption("Dibangun dengan Streamlit")
 
-# Hero — Slider Foto Menu MBG
 menu_images = [
     "mbg_app/images/menu1.jpeg",
     "mbg_app/images/menu2.jpeg",
     "mbg_app/images/menu3.jpeg",
-
 ]
 
 menu_titles = [
-    "Menu Makan Bergizi Gratis",
-    "Menu Bergizi Seimbang",
-    "Menu Sehat untuk Peserta Didik",
+    "Menu Makan Bergizi Gratis 1",
+    "Menu Makan Bergizi Gratis 2",
+    "Menu Makan Bergizi Gratis 3",
 ]
 
-if "menu_index" not in st.session_state:
-    st.session_state.menu_index = 0
+# Gambar berganti otomatis setiap 4 detik
+slide_count = st_autorefresh(
+    interval=4000,
+    limit=None,
+    key="auto_menu_slider"
+)
 
+current_index = slide_count % len(menu_images)
 
-hero_col, illus_col = st.columns([1.55, 1], gap="large")
-with hero_col:
-    st.markdown(
-        f"""
-        <div class="mbg-hero">
-            <span class="mbg-eyebrow">Program Strategis Nasional</span>
-            <h1>Apa itu Makan Bergizi Gratis (MBG)?</h1>
-            <p>
-            Program Makan Bergizi Gratis (MBG) adalah salah satu program strategis nasional yang
-            diselenggarakan oleh pemerintah melalui Badan Gizi Nasional (BGN) untuk menyediakan
-            makanan bergizi kepada peserta didik, ibu hamil, ibu menyusui, dan balita. Program ini
-            bertujuan meningkatkan kualitas gizi masyarakat, mendukung tumbuh kembang anak,
-            mempercepat penurunan prevalensi stunting, serta mewujudkan sumber daya manusia
-            Indonesia yang sehat, cerdas, dan produktif.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 with illus_col:
-    st.markdown("""
+
+    # Styling slider
+    st.markdown(
+        """
         <style>
-        .hero-menu-image img {
+        .menu-slider {
             width: 100%;
-            height: 310px;
-            object-fit: cover;
-            border-radius: 24px;
-            border: 10px solid #0F2A22;
-            box-shadow: 0 10px 25px rgba(15, 42, 34, 0.15);
+            height: 360px;
+            background: #0F2A22;
+            border-radius: 28px;
+            padding: 12px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .menu-title {
+        .menu-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain !important;
+            border-radius: 18px;
+        }
+
+        .menu-caption {
             text-align: center;
-            font-weight: 700;
             color: #214332;
-            margin-top: 10px;
-            font-size: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            margin-top: 12px;
+        }
+
+        .slider-indicator {
+            text-align: center;
+            font-size: 18px;
+            color: #214332;
+            margin-top: 6px;
+            letter-spacing: 4px;
         }
         </style>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
-    current_index = st.session_state.menu_index
+    # Container gambar
+    st.markdown('<div class="menu-slider">', unsafe_allow_html=True)
 
     st.image(
         menu_images[current_index],
         use_container_width=True
     )
 
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Judul menu
     st.markdown(
         f"""
-        <div class="menu-title">
+        <div class="menu-caption">
             {menu_titles[current_index]}
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    # Tombol slider
-    left, center, right = st.columns([1, 3, 1])
+    # Indikator ● ○ ○
+    indicators = ""
 
-    with left:
-        if st.button("←", key="prev_menu", use_container_width=True):
-            st.session_state.menu_index = (
-                st.session_state.menu_index - 1
-            ) % len(menu_images)
-            st.rerun()
+    for i in range(len(menu_images)):
+        if i == current_index:
+            indicators += "●"
+        else:
+            indicators += "○"
 
-    with center:
-        indicators = ""
-
-        for i in range(len(menu_images)):
-            if i == st.session_state.menu_index:
-                indicators += "● "
-            else:
-                indicators += "○ "
-
-        st.markdown(
-            f"""
-            <div style="
-                text-align:center;
-                font-size:18px;
-                color:#214332;
-                padding-top:5px;
-            ">
-                {indicators}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with right:
-        if st.button("→", key="next_menu", use_container_width=True):
-            st.session_state.menu_index = (
-                st.session_state.menu_index + 1
-            ) % len(menu_images)
-            st.rerun()
-
+    st.markdown(
+        f"""
+        <div class="slider-indicator">
+            {indicators}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Statistik ringkas
 st.markdown('<p class="section-eyebrow">Sekilas Angka</p>', unsafe_allow_html=True)
