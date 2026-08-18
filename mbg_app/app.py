@@ -42,7 +42,7 @@ st.markdown("""
     /* 4. MENGGESER TEKS KE KIRI HANYA UNTUK TAMPILAN WEB (Desktop) */
     @media (min-width: 992px) {
         .caption-wrapper {
-            transform: translateX(-50px); /* Ubah angka -20px ini jika geserannya kurang/lebih */
+            transform: translateX(-100px); /* Ubah angka -20px ini jika geserannya kurang/lebih */
         }
     }
     
