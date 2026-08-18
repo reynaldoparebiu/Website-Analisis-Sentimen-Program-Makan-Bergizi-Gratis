@@ -15,9 +15,10 @@ st.markdown("""
     [data-testid="stImage"] img {
         border-radius: 12px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        object-fit: cover;
-        height: 220px; /* Menyeragamkan tinggi semua foto */
         width: 100%;
+        height: auto; /* Membuat tinggi responsif menyesuaikan lebar secara proporsional */
+        object-fit: contain; /* Memastikan seluruh gambar masuk tanpa terpotong */
+        max-height: 350px; /* Mencegah gambar menjadi terlalu raksasa di layar desktop besar */
     }
     
     /* Styling untuk judul tahapan */
