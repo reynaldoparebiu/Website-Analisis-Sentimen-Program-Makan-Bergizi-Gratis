@@ -11,14 +11,21 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* Styling khusus untuk gambar agar terlihat seperti 'Card' */
+    /* 1. Menghapus efek "bungkus" (background/kotak tepi) pada container gambar */
+    [data-testid="stImage"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    /* 2. Memberikan shadow dan lengkungan langsung HANYA pada gambar */
     [data-testid="stImage"] img {
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        width: 100%;
-        height: auto; /* Membuat tinggi responsif menyesuaikan lebar secara proporsional */
-        object-fit: contain; /* Memastikan seluruh gambar masuk tanpa terpotong */
-        max-height: 350px; /* Mencegah gambar menjadi terlalu raksasa di layar desktop besar */
+        border-radius: 12px !important;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.18) !important; /* Shadow elegan pada gambar */
+        width: 100% !important;
+        height: auto !important; /* Menjaga proporsi asli agar tidak terpotong (responsive) */
+        display: block;
     }
     
     /* Styling untuk judul tahapan */
@@ -108,7 +115,7 @@ with illus_col:
             color: #214332;
             font-weight: 700;
             font-size: 15px;
-            margin-top: 8px;
+            margin-top: 15px;
         ">
             {menu_titles[current_index]}
         </div>
@@ -266,7 +273,7 @@ with cta_l:
         "Halaman **Analisis Sentimen** menyajikan hasil klasifikasi opini masyarakat terhadap "
         "**Program Makan Bergizi Gratis (MBG)** berdasarkan data yang diperoleh dari **media sosial X.** "
         "Proses analisis dilakukan menggunakan algoritma **Multinomial Naive Bayes** dengan "
-        "pembobotan fitur TF-IDF, sehingga menghasilkan klasifikasi sentimen ke dalam tiga"
+        "pembobotan fitur TF-IDF, sehingga menghasilkan klasifikasi sentimen ke dalam tiga "
         "kategori, yaitu **positif**, **netral**, dan **negatif**."
     )
 with cta_r:
