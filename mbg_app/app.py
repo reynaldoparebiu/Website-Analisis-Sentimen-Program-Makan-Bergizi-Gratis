@@ -3,7 +3,7 @@ import base64
 from streamlit_autorefresh import st_autorefresh
 from utils.theme import BASE_CSS, PINE, MANGO, SAGE, CLAY
 
-# --- TAMBAHAN: Fungsi untuk membaca gambar lokal menjadi Base64 ---
+# Fungsi konversi gambar lokal ke Base64
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
@@ -17,7 +17,7 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* 1. Flexbox Container untuk membungkus Gambar + Judul + Indikator */
+    /* Container Flexbox Slider */
     .slider-container {
         display: flex;
         flex-direction: column;
@@ -27,17 +27,15 @@ st.markdown("""
         margin: 0 auto;
     }
 
-    /* 2. Styling khusus untuk gambar dalam slider */
     .slider-image {
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         width: 100%;
-        max-width: 380px; /* Membatasi ukuran maksimal di desktop */
+        max-width: 380px;
         height: auto;
         display: block;
     }
 
-    /* 3. Styling Judul Menu */
     .slider-title {
         color: #214332;
         font-weight: 700;
@@ -46,7 +44,6 @@ st.markdown("""
         text-align: center;
     }
 
-    /* 4. Styling Indikator Slider */
     .slider-indicators {
         color: #214332;
         font-size: 17px;
@@ -55,9 +52,8 @@ st.markdown("""
         text-align: center;
     }
     
-    /* Styling untuk judul tahapan */
     .alur-title {
-        color: #214332; /* Warna hijau gelap senada dengan tema */
+        color: #214332;
         font-weight: 700;
         font-size: 18px;
         margin-top: 15px;
@@ -69,21 +65,14 @@ st.markdown("""
 
 st.markdown(BASE_CSS, unsafe_allow_html=True)
 
-
 # Sidebar
 with st.sidebar:
     st.markdown("### 🍚 MBG Insight")
-    st.markdown(
-        "Ruang informasi & riset seputar Program Makan Bergizi Gratis."
-    )
+    st.markdown("Ruang informasi & riset seputar Program Makan Bergizi Gratis.")
     st.markdown("---")
     st.markdown("**Halaman**")
     st.page_link("app.py", label="Beranda · Tentang MBG", icon="🏠")
-    st.page_link(
-        "pages/1_Analisis_Sentimen.py",
-        label="Analisis Sentimen",
-        icon="🔎",
-    )
+    st.page_link("pages/1_Analisis_Sentimen.py", label="Analisis Sentimen", icon="🔎")
     st.markdown("---")
     st.caption("Dibangun dengan Streamlit")
 
@@ -99,18 +88,18 @@ menu_titles = [
     "Menu Makan Bergizi Gratis 3",
 ]
 
-# Gambar berganti otomatis setiap 4 detik
+# Slider otomatis (4 detik)
 slide_count = st_autorefresh(
     interval=4000,
     limit=None,
     key="auto_menu_slider"
 )
-
 current_index = slide_count % len(menu_images)
 
 
 hero_col, illus_col = st.columns([1.55, 1], gap="large", vertical_alignment="center")
 
+# Bagian Hero
 with hero_col:
     st.markdown(
         f"""
@@ -130,11 +119,10 @@ with hero_col:
         unsafe_allow_html=True,
     )
 
+# Bagian Slider Gambar Base64
 with illus_col:
-    # --- PERUBAHAN: Konversi gambar ke base64 dan satukan di dalam 1 div Flexbox ---
     img_b64 = get_image_base64(menu_images[current_index])
     
-    # Indikator slider
     indicators = " ".join(
         "●" if i == current_index else "○"
         for i in range(len(menu_images))
@@ -155,10 +143,8 @@ with illus_col:
         unsafe_allow_html=True
     )
 
-
-# Statistik ringkas
+# Statistik
 st.markdown('<p class="section-eyebrow">Sekilas Angka</p>', unsafe_allow_html=True)
-
 s1, s2, s3, s4 = st.columns(4)
 stats = [
     ("82,9 juta", "Target penerima manfaat nasional"),
@@ -179,7 +165,7 @@ st.caption("*Data berdasarkan target resmi pemerintah.")
 
 st.markdown('<hr class="divider-thin"/>', unsafe_allow_html=True)
 
-# Alur program — Yayasan → Dapur → Sekolah
+# Alur Program
 st.markdown('<p class="section-eyebrow">BAGAIMANA ALURNYA</p>', unsafe_allow_html=True)
 st.markdown("### Tiga Tahapan Pelaksanaan")
 
@@ -200,30 +186,13 @@ with col3:
     st.markdown("<div class='alur-title'>03. Anak-anak Menikmati</div>", unsafe_allow_html=True)
     st.caption("Peserta didik menyantap makanan bergizi secara serentak bersama teman-teman di kelas dengan pengawasan para guru.")
 
-
-
+# Ekosistem MBG
 st.markdown('<p class="section-eyebrow">EKOSISTEM PENYELENGGARAAN MBG</p>', unsafe_allow_html=True)
 st.markdown("### Tiga simpul dalam satu rantai pangan bergizi")
 
-icon_yayasan = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="4" y="18" width="34" height="20" rx="3" fill="#173C31"/>
-<path d="M21 6 L38 18 H4 Z" fill="#E8A33D"/>
-<rect x="17" y="24" width="8" height="14" fill="#FBF6EA"/>
-</svg>"""
-
-icon_dapur = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="21" cy="24" r="14" fill="#FBF6EA" stroke="#173C31" stroke-width="2.5"/>
-<path d="M13 24a8 8 0 0 1 16 0" fill="#E8A33D"/>
-<path d="M15 8c0 3-3 3-3 6M22 6c0 3-3 3-3 6M29 8c0 3-3 3-3 6" stroke="#C1502E" stroke-width="2.4" stroke-linecap="round"/>
-</svg>"""
-
-icon_sekolah = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="6" y="16" width="30" height="20" rx="2" fill="#173C31"/>
-<rect x="14" y="22" width="6" height="6" fill="#FBF6EA"/>
-<rect x="22" y="22" width="6" height="6" fill="#FBF6EA"/>
-<path d="M21 6 L36 16 H6 Z" fill="#4C7A5E"/>
-<rect x="18" y="28" width="6" height="8" fill="#E8A33D"/>
-</svg>"""
+icon_yayasan = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="18" width="34" height="20" rx="3" fill="#173C31"/><path d="M21 6 L38 18 H4 Z" fill="#E8A33D"/><rect x="17" y="24" width="8" height="14" fill="#FBF6EA"/></svg>"""
+icon_dapur = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="21" cy="24" r="14" fill="#FBF6EA" stroke="#173C31" stroke-width="2.5"/><path d="M13 24a8 8 0 0 1 16 0" fill="#E8A33D"/><path d="M15 8c0 3-3 3-3 6M22 6c0 3-3 3-3 6M29 8c0 3-3 3-3 6" stroke="#C1502E" stroke-width="2.4" stroke-linecap="round"/></svg>"""
+icon_sekolah = """<svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="16" width="30" height="20" rx="2" fill="#173C31"/><rect x="14" y="22" width="6" height="6" fill="#FBF6EA"/><rect x="22" y="22" width="6" height="6" fill="#FBF6EA"/><path d="M21 6 L36 16 H6 Z" fill="#4C7A5E"/><rect x="18" y="28" width="6" height="8" fill="#E8A33D"/></svg>"""
 
 pillars = [
     ("01", icon_yayasan, "Mitra Penyelenggara", "Mengelola operasional SPPG, pendanaan, sumber daya manusia, administrasi, serta memastikan pelaksanaan program sesuai ketentuan Badan Gizi Nasional.", ""),
@@ -245,7 +214,6 @@ for col, (step, icon, title, desc, cls) in zip([c1, c2, c3], pillars):
         )
 
 st.markdown('<hr class="divider-thin"/>', unsafe_allow_html=True)
-
 
 # Urgensi & Sasaran
 u_col, s_col = st.columns(2, gap="large")
@@ -273,8 +241,7 @@ with s_col:
 
 st.markdown('<hr class="divider-thin"/>', unsafe_allow_html=True)
 
-
-# CTA menuju halaman analisis sentimen
+# CTA Analisis Sentimen
 cta_l, cta_r = st.columns([2, 1], gap="large")
 with cta_l:
     st.markdown('<p class="section-eyebrow">Riset Terkait</p>', unsafe_allow_html=True)
