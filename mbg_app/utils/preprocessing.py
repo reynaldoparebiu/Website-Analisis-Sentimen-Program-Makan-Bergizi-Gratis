@@ -1,16 +1,3 @@
-"""
-Utilitas pra-pemrosesan teks untuk model analisis sentimen MBG.
-
-TfidfVectorizer yang dipakai dilatih dengan parameter lowercase=False,
-artinya teks sudah dilower-case terlebih dahulu sebelum divectorize saat
-training. Fungsi di bawah ini menstandardkan input pengguna dengan cara
-yang sama supaya konsisten dengan data latih.
-
-Jika preprocessing asli Anda saat training berbeda (mis. ada stemming
-Sastrawi, normalisasi slang, dsb.), sesuaikan fungsi `clean_text` di
-bawah ini agar identik dengan notebook training Anda.
-"""
-
 import re
 
 
