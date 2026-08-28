@@ -1,6 +1,12 @@
 import streamlit as st
+import base64
 from streamlit_autorefresh import st_autorefresh
 from utils.theme import BASE_CSS, PINE, MANGO, SAGE, CLAY
+
+# --- TAMBAHAN: Fungsi untuk membaca gambar lokal menjadi Base64 ---
+def get_image_base64(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
 st.set_page_config(
     page_title="MBG • Makan Bergizi Gratis",
@@ -11,39 +17,42 @@ st.set_page_config(
 
 st.markdown("""
     <style>
-    /* 1. Menghapus efek "bungkus" (background/kotak tepi putih) pada container gambar */
-    [data-testid="stImage"] {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        display: flex !important;
-        justify-content: center !important; /* Memastikan posisi horizontal ke tengah */
+    /* 1. Flexbox Container untuk membungkus Gambar + Judul + Indikator */
+    .slider-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin: 0 auto;
     }
 
-    /* 2. Styling khusus untuk gambar: shadow langsung di gambar & ukuran disesuaikan */
-    [data-testid="stImage"] img {
-        border-radius: 12px !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important; /* Shadow lembut pada gambar */
-        width: 100% !important;
-        max-width: 380px !important; /* Membatasi ukuran maksimal di desktop agar tidak raksasa */
-        height: auto !important; /* Menjaga agar tidak kepotong */
-        display: block !important;
-        margin: 0 auto !important; /* Posisi ke tengah */
+    /* 2. Styling khusus untuk gambar dalam slider */
+    .slider-image {
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 380px; /* Membatasi ukuran maksimal di desktop */
+        height: auto;
+        display: block;
     }
-    
-    /* 3. Wrapper untuk Judul & Indikator Slider */
-    .caption-wrapper {
-        max-width: 380px;
-        margin: 0 auto;
+
+    /* 3. Styling Judul Menu */
+    .slider-title {
+        color: #214332;
+        font-weight: 700;
+        font-size: 15px;
+        margin-top: 12px;
         text-align: center;
     }
 
-    /* 4. MENGGESER TEKS KE KIRI HANYA UNTUK TAMPILAN WEB (Desktop) */
-    @media (min-width: 992px) {
-        .caption-wrapper {
-            transform: translateX(-130px); /* Ubah angka -20px ini jika geserannya kurang/lebih */
-        }
+    /* 4. Styling Indikator Slider */
+    .slider-indicators {
+        color: #214332;
+        font-size: 17px;
+        letter-spacing: 3px;
+        margin-top: 4px;
+        text-align: center;
     }
     
     /* Styling untuk judul tahapan */
@@ -122,35 +131,23 @@ with hero_col:
     )
 
 with illus_col:
-    st.image(
-        menu_images[current_index],
-        use_container_width=True
-    )
-
+    # --- PERUBAHAN: Konversi gambar ke base64 dan satukan di dalam 1 div Flexbox ---
+    img_b64 = get_image_base64(menu_images[current_index])
+    
     # Indikator slider
     indicators = " ".join(
         "●" if i == current_index else "○"
         for i in range(len(menu_images))
     )
 
-    # Menggunakan class "caption-wrapper" yang sudah diatur di CSS atas
     st.markdown(
         f"""
-        <div class="caption-wrapper">
-            <div style="
-                color: #214332;
-                font-weight: 700;
-                font-size: 15px;
-                margin-top: 12px;
-            ">
+        <div class="slider-container">
+            <img src="data:image/jpeg;base64,{img_b64}" class="slider-image" alt="Menu MBG" />
+            <div class="slider-title">
                 {menu_titles[current_index]}
             </div>
-            <div style="
-                color: #214332;
-                font-size: 17px;
-                letter-spacing: 3px;
-                margin-top: 4px;
-            ">
+            <div class="slider-indicators">
                 {indicators}
             </div>
         </div>
