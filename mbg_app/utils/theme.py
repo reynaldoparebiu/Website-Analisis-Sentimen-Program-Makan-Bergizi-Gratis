@@ -1,9 +1,7 @@
 """Token desain & CSS bersama untuk seluruh halaman aplikasi."""
-
-# ---- Palet warna (bertema pangan & pertanian, bukan default AI) ----
-PINE = "#173C31"          # hijau tua - kepercayaan, pertanian
+PINE = "#173C31"          
 PINE_SOFT = "#2E5C4B"
-MANGO = "#E8A33D"         # kuning kunyit/mangga - kehangatan pangan
+MANGO = "#E8A33D"         
 MANGO_SOFT = "#F4C878"
 CLAY = "#C1502E"          # merah tanah liat - untuk sentimen negatif
 SAGE = "#4C7A5E"          # hijau sage - untuk sentimen positif
