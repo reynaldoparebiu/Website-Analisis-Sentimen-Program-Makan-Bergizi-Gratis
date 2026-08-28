@@ -27,6 +27,9 @@ mbg_app/
 │   ├── Dapur.jpeg
 │   ├── Makan_mbg.jpg
 │   └── pengantaran.jpeg
+│   └── menu1.jpeg
+│   └── menu2.jpeg
+│   └── menu3.jpeg
 ├── .streamlit/
 │   └── config.toml
 └── requirements.txt
